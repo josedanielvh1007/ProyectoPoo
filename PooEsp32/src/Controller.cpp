@@ -8,7 +8,7 @@ Controller::Controller()
 void Controller::begin() {
     orientation.begin();
     tap.begin();
-    mqtt.begin("YOUR_SSID", "YOUR_PASSWORD");
+    mqtt.begin("HUAWEI", "Jose1007");
 }
 
 void Controller::loop() {
