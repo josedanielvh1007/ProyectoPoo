@@ -2,7 +2,7 @@
 
 Controller::Controller()
     : tap(27),                        // Modify pin as needed
-      mqtt("192.168.1.100", 1883)     // MQTT broker IP
+      mqtt("192.168.43.155", 1883)     // MQTT broker IP
 {}
 
 void Controller::begin() {

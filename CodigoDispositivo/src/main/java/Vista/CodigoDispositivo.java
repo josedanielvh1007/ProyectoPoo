@@ -15,26 +15,32 @@ public class CodigoDispositivo {
         SensorData sensorData = new SensorData();
 
         // Connect to local MQTT broker
-        MqttReceiver receiver = new MqttReceiver("tcp://localhost:1883", "JavaClient", sensorData);
+        MqttReceiver receiver = new MqttReceiver(
+                "tcp://192.168.43.155:1883", // broker IP:port
+                "LaptopClient",
+                sensorData
+        );
 
-        // Example: read sensor data periodically
-        new Thread(() -> {
-            while (true) {
-                System.out.printf("Orientation: Roll=%.2f Pitch=%.2f Yaw=%.2f%n",
-                        sensorData.getRoll(),
-                        sensorData.getPitch(),
-                        sensorData.getYaw());
-                System.out.printf("Tap: Pressed=%b Shaken=%b Type=%s%n",
-                        sensorData.isPressed(),
-                        sensorData.isShaken(),
-                        sensorData.getPressType());
+        while (true) {
+            // Orientation
+            System.out.println("Roll: " + sensorData.getRoll());
+            System.out.println("Pitch: " + sensorData.getPitch());
+            System.out.println("Yaw: " + sensorData.getYaw());
 
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            // Tap events
+            if (sensorData.isPressed()) {
+                System.out.println("Pressed: " + sensorData.getPressType());
             }
-        }).start();
+            if (sensorData.isShaken()) {
+                System.out.println("Shaken!");
+            }
+
+            // Small delay so output is readable
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
