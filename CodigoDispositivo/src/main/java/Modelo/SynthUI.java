@@ -7,7 +7,6 @@ package Modelo;
 // ─────────────────────────────────────────────
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
@@ -188,14 +187,12 @@ public class SynthUI extends JFrame {
     // ───── PianoKey Component ─────
     private class PianoKey extends JComponent {
         final String name;
-        final int semitoneOffset;
         final boolean black;
         private boolean pressed = false;
         private KeyLED led;
 
         PianoKey(String name, int semitoneOffset, boolean black) {
             this.name = name;
-            this.semitoneOffset = semitoneOffset;
             this.black = black;
             setOpaque(false);
 
@@ -281,9 +278,7 @@ public class SynthUI extends JFrame {
     // ───── LED Indicator ─────
     private static class KeyLED extends JComponent {
         private boolean on = false;
-        private final int size;
-
-        KeyLED(int size) { this.size = size; setOpaque(false); }
+        KeyLED(int size) { setOpaque(false); }
 
         void setOn(boolean on) { this.on = on; repaint(); }
 

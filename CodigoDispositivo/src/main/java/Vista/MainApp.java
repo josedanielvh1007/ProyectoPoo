@@ -17,8 +17,7 @@ public class MainApp {
 
         SensorData sensorData = new SensorData();
 
-        // Start MQTT listener (ESP32)
-        MqttReceiver receiver = new MqttReceiver(
+        new MqttReceiver(
                 "tcp://192.168.43.155:1883",
                 "LaptopClient",
                 sensorData
