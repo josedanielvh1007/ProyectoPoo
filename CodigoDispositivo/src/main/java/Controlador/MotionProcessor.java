@@ -9,7 +9,7 @@ import Modelo.SensorData;
 /**
  *
  * @author jose
- */
+*/
 public class MotionProcessor {
 
     // velocities
