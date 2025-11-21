@@ -35,16 +35,21 @@ This approach simulates an **API-like interaction**, but fully **locally**, with
 - Ensures **real-time, lightweight communication** without internet dependency.
 - Configured to listen on **port 1883** and accept connections from devices in the same network.
 
+### 4. Java Synthesizer Application
+
+- Uses `SensorData` to control a **virtual piano**.
+- Maps sensor **roll** to piano keys, **pitch** to volume, and **vertical displacement** to octave.
+- Plays notes using a **MIDI engine** (`GloveSynth`) and highlights keys on a GUI (`SynthUI`).
+- Logs every note played to a **text file** (`notes_log.txt`) for later analysis.
+
 ---
 
 ## Data Flow
 
-1. **ESP32 reads sensors** → JSON data created → **published to MQTT broker**.  
-2. **Mosquitto broker receives messages** → forwards them to all subscribers.  
-3. **Java application receives messages** → updates `SensorData` object → application reacts accordingly.
-
-[ESP32 Sensors] --JSON--> [MQTT Broker on Laptop] --JSON--> [Java MQTT Receiver]
-
+1. **ESP32 reads sensors** → JSON data created → **published to MQTT broker**  
+2. **Mosquitto broker receives messages** → forwards them to all subscribers  
+3. **Java application receives messages** → updates `SensorData` → GUI and MIDI engine react → notes logged via
+```[ESP32 Sensors] --JSON--> [MQTT Broker on Laptop] --JSON--> [Java MQTT Receiver / Synth App]```
 
 ---
 
@@ -53,7 +58,8 @@ This approach simulates an **API-like interaction**, but fully **locally**, with
 - Works locally, like a **local API**: fast, responsive, and independent of internet connection.  
 - Uses **MQTT**, a lightweight and reliable messaging protocol for IoT devices.  
 - Flexible: multiple devices can subscribe to the same topics if needed.  
-- Easy to integrate into other local applications or visualization tools.  
+- Supports **real-time music interaction** with visualization and MIDI output.  
+- Records notes played into a **log file** for persistence or analysis.
 
 ---
 
@@ -67,15 +73,23 @@ This approach simulates an **API-like interaction**, but fully **locally**, with
    sudo apt install mosquitto mosquitto-clients -y
    sudo systemctl enable mosquitto
    sudo systemctl start mosquitto
-   ```
 2. Ensure Mosquitto is running:
-    ```bash
-    sudo systemctl status mosquitto
-    sudo lsof -i :1883
-    ```
-3. Update ```MqttReceiver.java``` with the broker IP (laptop IP on your network).
+   ```bash
+   sudo systemctl status mosquitto
+   sudo lsof -i :1883
+   sudo systemctl start mosquitto
+3. Update the ```MqttReceiver.java``` with the broker IP.
 
-### 2. ESP32
+### 2. Esp32
+
 1. Flash the ESP32 code.
 2. Configure the MQTT client with the laptop IP and port 1883.
-3. Ensure ESP32 connects to the same Wi-Fi network as the laptop
+3. Ensure ESP32 connects to the same Wi-Fi network as the laptop.
+
+### 3. Java Application
+
+1. Compile and run the Java project (e.g., in NetBeans, IntelliJ, or via Maven/Gradle).
+2. The GUI (SynthUI) will launch automatically.
+3. Sensor events from ESP32 control piano keys and MIDI playback in real-time.
+
+> All played notes are logged in notes_log.txt via the Persistency class
